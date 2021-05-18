@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "bin": {
-    "lwj-next-init": "bin/lwj-next-init"
+    "lwj-cli": "bin/lwj-cli"
   },
   "files": [
     "bin",
