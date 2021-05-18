@@ -9,14 +9,23 @@
   "bin": {
     "lwj-next-init": "bin/lwj-next-init"
   },
+  "files": [
+    "bin",
+    "src",
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/goldEli/lwj-cli.git"
+  },
   "publishConfig": {
     "access": "public"
   },
   "keywords": [
     "cli",
-    "lwj-next-init"
+    "lwj"
   ],
-  "author": "",
+  "author": "miaoyu",
   "license": "ISC",
   "dependencies": {
     "arg": "^5.0.0",
