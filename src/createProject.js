@@ -5,60 +5,79 @@ import { promisify } from "util";
 import execa from "execa";
 import Listr from "listr";
 import { projectInstall } from "pkg-install";
-import { log } from "./utils";
+import { log, createLoading } from "./utils";
 
-// async function initGit(options) {
-//     const result = await execa("git", ["init"], {
-//       cwd: options.targetDirectory,
-//     });
-//     if (result.failed) {
-//       return Promise.reject(new Error("Failed to initialize git"));
-//     }
-//     return;
-//   }
 const repositoryName = "shop-sales-wx-app-next";
 const repositoryDir = path.resolve(process.cwd(), repositoryName);
 async function updateRepo() {
-  const result = await execa("git", [
-    "pull", "--rebase"
-  ]);
-  if (result.failed) {
-    return Promise.reject(new Error("仓库更新失败"));
+  const loading = createLoading("仓库更新");
+  try {
+    const result = await execa("git", ["pull", "--rebase"], {
+      cwd: repositoryDir,
+    });
+
+    if (result.failed) {
+      loading.fail();
+      return Promise.reject(new Error("仓库更新失败"));
+    }
+    loading.succeed();
+  } catch (error) {
+    console.error(error);
+    loading.fail();
   }
-  log.suc("仓库更新完成!");
 }
 
 // 克隆仓库
 async function cloneRepo() {
+  const loading = createLoading("仓库下载");
   const result = await execa("git", [
     "clone",
     "git@github.com:goldEli/shop-sales-wx-app-next.git",
   ]);
   if (result.failed) {
+    loading.fail();
     return Promise.reject(new Error("仓库下载失败"));
   }
-  log.suc("仓库下载完毕!");
+  loading.succeed();
 }
 
 // 安装依赖
 async function install() {
-  await execa("cd", [repositoryDir]);
-  const result = await execa("yarn");
+  const loading = createLoading("仓库依赖安装");
+  const result = await execa("yarn", {
+    cwd: repositoryDir,
+  });
   if (result.failed) {
+    loading.fail();
     return Promise.reject(new Error("依赖安装失败"));
   }
-  log.suc("依赖晚装完毕");
+  loading.succeed();
 }
 
 // 启动
-async function start() {}
+async function start() {
+  const loading = createLoading("启动项目");
+  const result = await execa(
+    "taro",
+    ["build", "--type", "weapp", "--blended", "--watch"],
+    {
+      cwd: repositoryDir,
+    }
+  );
+  if (result.failed) {
+    loading.fail();
+    return Promise.reject(new Error("依赖安装失败"));
+  }
+  loading.succeed();
+}
 
 export async function createProject() {
-  console.log(process.cwd(), fs.existsSync(repositoryDir));
+  console.log("===开始创建项目===");
   if (fs.existsSync(repositoryDir)) {
     await updateRepo();
   } else {
     await cloneRepo();
   }
   await install();
+//   await start()
 }

@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import ora from "ora";
 
 export const log = {
   warn: (msg) => {
@@ -10,4 +11,9 @@ export const log = {
   suc: (msg) => {
     console.log("%s", chalk.green(msg));
   },
+};
+
+export const createLoading = (msg) => {
+  const spinner = ora(chalk.green(msg)).start();
+  return spinner;
 };
