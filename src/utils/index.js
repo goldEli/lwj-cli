@@ -14,6 +14,6 @@ export const log = {
 };
 
 export const createLoading = (msg) => {
-  const spinner = ora(chalk.green(msg)).start();
+  const spinner = ora(msg).start();
   return spinner;
 };

@@ -30,7 +30,7 @@ export async function run(args) {
     console.log("  --npm          use npm (use yarn by default)");
     console.log();
     console.log("Commands:");
-    console.log("  create         创建渐进式引入taro项目");
+    console.log("  create         创建渐进式taro项目");
     return;
   }
   switch (options.command) {

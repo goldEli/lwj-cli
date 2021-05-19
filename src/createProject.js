@@ -1,14 +1,11 @@
 import fs from "fs";
-import ncp from "ncp";
-import path from "path";
-import { promisify } from "util";
 import execa from "execa";
-import Listr from "listr";
-import { projectInstall } from "pkg-install";
 import { log, createLoading } from "./utils";
+import config from "../config";
 
-const repositoryName = "shop-sales-wx-app-next";
-const repositoryDir = path.resolve(process.cwd(), repositoryName);
+
+const repositoryName = config.repository.name;
+const repositoryDir = config.repository.dir;
 async function updateRepo() {
   const loading = createLoading("项目代码更新");
   try {
@@ -30,10 +27,11 @@ async function updateRepo() {
 // 克隆项目
 async function cloneRepo() {
   const loading = createLoading("项目代码下载");
-  const result = await execa("git", [
-    "clone",
-    "git@github.com:goldEli/shop-sales-wx-app-next.git",
-  ]);
+  const commands = [
+    "git",
+    ["clone", config.repository.gitUrl],
+  ];
+  const result = await execa(...commands);
   if (result.failed) {
     loading.fail();
     return Promise.reject(new Error("项目代码下载失败"));
@@ -74,7 +72,10 @@ async function install(useNpm) {
 
 export async function createProject(options) {
   console.log("   ");
-  console.log(`开始创建项目: ${repositoryName}`);
+  log.suc(`开始创建项目`);
+  console.log("   ");
+  console.log(`项目名称: ${repositoryName}`);
+  console.log(`仓库地址: ${config.repository.gitUrl}`);
   console.log("   ");
   console.log("   ");
   if (fs.existsSync(repositoryDir)) {
