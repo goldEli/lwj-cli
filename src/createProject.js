@@ -3,7 +3,6 @@ import execa from "execa";
 import { log, createLoading } from "./utils";
 import config from "../config";
 
-
 const repositoryName = config.repository.name;
 const repositoryDir = config.repository.dir;
 async function updateRepo() {
@@ -29,7 +28,7 @@ async function cloneRepo() {
   const loading = createLoading("项目代码下载");
   const commands = [
     "git",
-    ["clone", config.repository.gitUrl],
+    ["clone", "-b", "develop", config.repository.gitUrl],
   ];
   const result = await execa(...commands);
   if (result.failed) {
