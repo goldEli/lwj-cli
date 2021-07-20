@@ -26,19 +26,21 @@ export async function run(args) {
     console.log("Usage: lwj <command> [options]");
     console.log();
     console.log("Options:");
-    console.log("  --help          output usage information");
-    console.log("  --npm          use npm (use yarn by default)");
+    console.log("\t--help\toutput usage information");
+    console.log("\t--npm\tuse npm (use yarn by default)");
     console.log();
     console.log("Commands:");
-    console.log("  create         创建渐进式taro项目");
+    console.log("\tcreate\t创建渐进式taro项目");
+    console.log("\twatch\t文件监听");
     return;
   }
   switch (options.command) {
     case "create":
       await createProject(options);
-
       break;
-
+    case "watch":
+      await createProject(options);
+      break
     default:
       break;
   }
