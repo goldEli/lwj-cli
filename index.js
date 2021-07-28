@@ -6,6 +6,7 @@ function parseArgumentsIntoOptions(rawArgs) {
     {
       "--npm": Boolean,
       "--help": Boolean,
+      "--branch": String,
       "-n": "--npm",
       "-h": "--help",
     },
@@ -16,6 +17,7 @@ function parseArgumentsIntoOptions(rawArgs) {
   return {
     useNpm: args["--npm"],
     help: args["--help"],
+    branch: args["--branch"],
     command: args._[0]
   };
 }
@@ -31,6 +33,8 @@ export async function run(args) {
     console.log();
     console.log("Commands:");
     console.log("\tcreate\t创建渐进式taro项目");
+    console.log("\t\t --branch 分支名字，默认 develop 分支");
+    console.log();
     console.log("\twatch\t文件监听");
     return;
   }
