@@ -7,7 +7,7 @@ function parseArgumentsIntoOptions(rawArgs) {
       "--npm": Boolean,
       "--help": Boolean,
       "--branch": String,
-      "--useSSH": Boolean,
+      "--useHTTPS": Boolean,
       "-n": "--npm",
       "-h": "--help",
     },
@@ -19,7 +19,7 @@ function parseArgumentsIntoOptions(rawArgs) {
     useNpm: args["--npm"],
     help: args["--help"],
     branch: args["--branch"],
-    useSSH: args["--useSSH"],
+    useHTTPS: args["--useHTTPS"],
     command: args._[0],
   };
 }
@@ -36,6 +36,7 @@ export async function run(args) {
     console.log("Commands:");
     console.log("\tcreate\t创建渐进式taro项目");
     console.log("\t\t --branch 分支名字，默认 develop 分支");
+    console.log("\t\t --useHTTPS，使用 https clone 仓库，默认ssh");
     console.log();
     console.log("\twatch\t文件监听");
     return;
