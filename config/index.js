@@ -6,7 +6,8 @@ const config = {
     repository: {
         name: repositoryName,
         dir: repositoryDir,
-        gitUrl: "git@gitee.com:liweijia/shop-sales-wx-app-next.git"
+        // gitUrl: "git@gitee.com:liweijia/shop-sales-wx-app-next.git"
+        gitUrl: "https://gitee.com/liweijia/shop-sales-wx-app-next.git"
     }
 }
 
