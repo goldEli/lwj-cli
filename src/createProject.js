@@ -2,6 +2,7 @@ import fs from "fs";
 import execa from "execa";
 import { log, createLoading } from "./utils";
 import config from "../config";
+import * as child_process from 'child_process';
 
 const repositoryName = config.repository.name;
 const repositoryDir = config.repository.dir;
@@ -26,17 +27,21 @@ async function updateRepo() {
 // 克隆项目
 async function cloneRepo(branch = "develop", useHTTPS = false) {
   const loading = createLoading("项目代码下载");
-  const url = useHTTPS ? config.repository.gitUrl : config.repository.gitSSHUrl
-  const commands = [
-    "git",
-    ["clone", "-b", branch, url],
-  ];
-  const result = await execa(...commands);
-  if (result.failed) {
-    loading.fail();
-    return Promise.reject(new Error("项目代码下载失败"));
-  }
-  loading.succeed();
+  const url = useHTTPS ? config.repository.gitUrl : config.repository.gitSSHUrl;
+  const commands = ["git", ["clone", "-b", branch, url]];
+  // const result = await execa(...commands);
+  return new Promise((resolve, reject) => {
+    try {
+      const s = child_process.spawn(...commands, { stdio: "inherit", stdin: "inherit" });
+      s.on("close", () => {
+        resolve();
+        loading.succeed();
+      });
+    } catch (error) {
+      loading.fail(error);
+      reject(new Error("项目代码下载失败"));
+    }
+  });
 }
 
 // 安装依赖
