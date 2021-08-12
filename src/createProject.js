@@ -24,11 +24,12 @@ async function updateRepo() {
 }
 
 // 克隆项目
-async function cloneRepo(branch = "develop") {
+async function cloneRepo(branch = "develop", useSSH = false) {
   const loading = createLoading("项目代码下载");
+  const url = useSSH ? config.repository.gitSSHUrl : config.repository.gitUrl
   const commands = [
     "git",
-    ["clone", "-b", branch, config.repository.gitUrl],
+    ["clone", "-b", branch, url],
   ];
   const result = await execa(...commands);
   if (result.failed) {
@@ -80,7 +81,7 @@ export async function createProject(options) {
   if (fs.existsSync(repositoryDir)) {
     await updateRepo();
   } else {
-    await cloneRepo(options.branch);
+    await cloneRepo(options.branch, options.useSSH);
   }
   await install(options.useNpm);
   //   await start()

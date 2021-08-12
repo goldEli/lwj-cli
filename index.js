@@ -7,6 +7,7 @@ function parseArgumentsIntoOptions(rawArgs) {
       "--npm": Boolean,
       "--help": Boolean,
       "--branch": String,
+      "--useSSH": Boolean,
       "-n": "--npm",
       "-h": "--help",
     },
@@ -18,7 +19,8 @@ function parseArgumentsIntoOptions(rawArgs) {
     useNpm: args["--npm"],
     help: args["--help"],
     branch: args["--branch"],
-    command: args._[0]
+    useSSH: args["--useSSH"],
+    command: args._[0],
   };
 }
 
@@ -44,7 +46,7 @@ export async function run(args) {
       break;
     case "watch":
       await createProject(options);
-      break
+      break;
     default:
       break;
   }
