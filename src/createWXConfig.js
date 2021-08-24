@@ -3,8 +3,6 @@ import execa from "execa";
 import { log, createLoading } from "./utils";
 import path from "path";
 import ncp from "ncp";
-import config from "../config";
-import * as child_process from "child_process";
 import * as inquirer from "inquirer";
 import chalk from "chalk";
 import { promisify } from "util";
@@ -26,20 +24,18 @@ const extJsonPath = path.relative(process.cwd(), "./src/ext.json");
 const promptList = [
   {
     type: "list",
-    message: "连接的开发环境：",
+    message: "选择开发环境：",
     name: "env",
     choices: ["dev", "staging"],
   },
   {
     type: "input",
-    message: "请输入租户code 码：",
+    message: "请输入租户 code 码：",
     name: "code",
     default: "o",
   },
 ];
 export async function createWXConfig(options) {
-  console.log(projectDefaultJsonPath);
-  console.log(projectJsonPath);
   const answers = await inquirer.prompt(promptList);
   console.log(
     `${chalk.blue(
@@ -67,7 +63,9 @@ export async function createWXConfig(options) {
   data.ext.WX_CLIENT_APP_CODE = `sales-${answers.code}`;
 
   const str = JSON.stringify(data);
-  const res = await writeFile(extJsonPath, str);
+  await writeFile(extJsonPath, str).catch(() => {
+    loading1.fail();
+  });
   loading1.succeed();
   log.suc("");
   log.suc("配置文件创建完成。");
