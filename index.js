@@ -1,4 +1,5 @@
 import { createProject } from "./src/createProject";
+import { createWXConfig } from "./src/createWXConfig";
 import arg from "arg";
 
 function parseArgumentsIntoOptions(rawArgs) {
@@ -39,6 +40,7 @@ export async function run(args) {
     console.log("\t\t --useHTTPS，使用 https clone 仓库，默认ssh");
     console.log();
     console.log("\twatch\t文件监听");
+    console.log("\tconfigWX\t创建/修改 微信开发配置");
     return;
   }
   switch (options.command) {
@@ -48,6 +50,9 @@ export async function run(args) {
     case "watch":
       await createProject(options);
       break;
+    case "configWX":
+      await createWXConfig(options);
+      break; 
     default:
       break;
   }
