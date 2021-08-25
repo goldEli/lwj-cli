@@ -26,7 +26,7 @@ const promptList = [
     type: "list",
     message: "选择开发环境：",
     name: "env",
-    choices: ["dev", "staging"],
+    choices: ["dev", "staging", "prod"],
   },
   {
     type: "input",
@@ -58,7 +58,8 @@ export async function createWXConfig(options) {
     loading1.fail();
   });
   const data = JSON.parse(json.toString());
-  data.ext.DOMAIN = `http://cloud.sales-${answers.env}.liweijia.com`
+  const domain = answers.env === "prod" ? "sales" : `sales-${answers.env}`
+  data.ext.DOMAIN = `http://cloud.${domain}.liweijia.com`
   data.ext.APP_TENANT_CODE = answers.code;
   data.ext.WX_CLIENT_APP_CODE = `sales-${answers.code}`;
 
